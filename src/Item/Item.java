@@ -13,6 +13,11 @@ public class Item {
         this.owner = owner;
     }
 
+    @Override
+    public String toString(){
+        return "Denumire: " + this.name + " Pret: " + this.estimatedPrice + " Email proprietar: " + this.owner.getEmail();
+    }
+
     public String getName() {
         return name;
     }

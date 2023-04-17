@@ -1,6 +1,7 @@
 package Person;
 
 public class Employee extends Person{
+    private static int index= 0;
     private String jobTitle;
     private int salary;
 
@@ -9,6 +10,11 @@ public class Employee extends Person{
         super(firstName, lastName, phoneNumber, email);
         this.jobTitle = jobTitle;
         this.salary = salary;
+        index ++;
+    }
+
+    public static int getIndex() {
+        return index;
     }
 
     public String getJobTitle() {

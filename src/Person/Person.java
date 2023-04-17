@@ -13,6 +13,11 @@ public abstract class Person {
         this.email = email;
     }
 
+    @Override
+    public String toString(){
+        return this.firstName + " " + this.lastName;
+    }
+
     public String getFirstName() {
         return firstName;
     }
