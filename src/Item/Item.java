@@ -3,6 +3,7 @@ package Item;
 import Person.User;
 
 public class Item {
+    private static int index= 0;
     private String name;
     private int estimatedPrice;
     private User owner;
@@ -11,11 +12,16 @@ public class Item {
         this.name = name;
         this.estimatedPrice = estimatedPrice;
         this.owner = owner;
+        this.index++;
+    }
+
+    public static int getIndex() {
+        return index;
     }
 
     @Override
     public String toString(){
-        return "Denumire: " + this.name + " Pret: " + this.estimatedPrice + " Email proprietar: " + this.owner.getEmail();
+        return "Name: " + this.name + " Price: " + this.estimatedPrice + " Owner email: " + this.owner.getEmail();
     }
 
     public String getName() {

@@ -1,6 +1,7 @@
 package Building;
 
 public class Building {
+    private static int index= 0;
     private String name;
     private String address;
     private int surface;
@@ -11,6 +12,11 @@ public class Building {
         this.address = address;
         this.surface = surface;
         this.maxPeople = maxPeople;
+        this.index ++;
+    }
+
+    public static int getIndex() {
+        return index;
     }
 
     public String getName() {

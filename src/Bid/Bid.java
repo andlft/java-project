@@ -48,4 +48,9 @@ public class Bid {
     public void setItem(Item item) {
         this.item = item;
     }
+
+    @Override
+    public String toString(){
+        return "Sum: " + this.sum + " Bidder: " + this.bidder;
+    }
 }
