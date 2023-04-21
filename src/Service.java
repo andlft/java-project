@@ -2,6 +2,7 @@ import Auction.Auction;
 import Bid.Bid;
 import Building.Building;
 import Exceptions.LowerBid;
+import Exceptions.NoItems;
 import Item.Item;
 import Item.House;
 import Item.Car;
@@ -22,6 +23,10 @@ public class Service {
         auctions.put(auction.getIndex(), auction);
     }
     public void addBid (Bid bid) throws LowerBid {
+        if (bid.getItem().getAvailable() == false){
+            System.out.println("Item already sold!");
+            return;
+        }
         int i = bids.size() - 1;
         while (i >= 0){
             if ((bids.get(i).getItem()).equals(bid.getItem())) {
@@ -55,25 +60,34 @@ public class Service {
     public void addItem (Item item){
         items.put(item.getIndex(), item);
     }
+    public void setItemAsSoldById (Integer id){
+        Item item = items.get(id);
+        item.setAvailable(false);
+    }
     public void addBuilding (Building building){buildings.put(building.getIndex(), building);}
-    public void showAllItems (){
+
+
+    public void showAllItems () throws NoItems{
+        if (items.size() == 0){
+            throw new  NoItems("There are no items to sell!", 555);
+        }
         items.forEach(
-                (key, value) -> System.out.println(value)
+                (key, value) -> System.out.println(key + " : " + value)
         );
     }
     public void showAllCars (){
-        for (Item it:items.values()){
-            if (it instanceof Car) {
-                Car c = (Car) it;
-                System.out.println(c);
+        for (Integer it:items.keySet() ){
+            if (items.get(it) instanceof Car) {
+                Car c = (Car) items.get(it);
+                System.out.println(it + " : " + c);
             }
         }
     }
     public void showAllHouses (){
-        for (Item it:items.values()){
-            if (it instanceof House) {
-                House h = (House) it;
-                System.out.println(h);
+        for (Integer it:items.keySet() ){
+            if (items.get(it) instanceof House) {
+                House h = (House) items.get(it);
+                System.out.println(it + " : " + h);
             }
         }
     }
@@ -82,6 +96,36 @@ public class Service {
             System.out.println(b);
         }
     }
+    public void showAllBuildings(){
+        for (Integer it:buildings.keySet() ){
+            Building b = buildings.get(it);
+            System.out.println(it + " : " + b);
+        }
+    }
+    public void showAllUsers(){
+        for (Integer it:users.keySet() ){
+            User u = users.get(it);
+            System.out.println(it + " : " + u);
+        }
+    }
+    public void showAllEmployees(){
+        for (Integer it:employees.keySet() ){
+            Employee e = employees.get(it);
+            System.out.println(it + " : " + e);
+        }
+    }
+    public void showAllAuctions(){
+        for (Integer it:auctions.keySet() ){
+            Auction a = auctions.get(it);
+            System.out.println(it + " : " + a);
+        }
+    }
+    public void showAllItemsAtAuction(Integer id){
+        for (Integer it: auctions.get(id).getAuctionedItems() ){
+            System.out.println(it + " : " + items.get(it));
+        }
+    }
+
 
     public User getUserById (Integer id){
         try {

@@ -11,13 +11,13 @@ import Person.Employee;
 
 public class Auction {
     private static int index= 0;
-    private List<Item> auctionedItems;
+    private List<Integer> auctionedItemsIds;
     private Building building;
     private Employee auctioneer;
     private Date auctionDate;
 
-    public Auction(List<Item> auctionedItems, Building building, Employee auctioneer, Date auctionDate, List<Bid> bids) {
-        this.auctionedItems = auctionedItems;
+    public Auction(List<Integer> auctionedItemsIds, Building building, Employee auctioneer, Date auctionDate, List<Bid> bids) {
+        this.auctionedItemsIds = auctionedItemsIds;
         this.building = building;
         this.auctioneer = auctioneer;
         this.auctionDate = auctionDate;
@@ -29,12 +29,12 @@ public class Auction {
         return index;
     }
 
-    public List<Item> getAuctionedItems() {
-        return auctionedItems;
+    public List<Integer> getAuctionedItems() {
+        return auctionedItemsIds;
     }
 
-    public void setAuctionedItems(List<Item> auctionedItems) {
-        this.auctionedItems = auctionedItems;
+    public void setAuctionedItems(List<Integer> auctionedItemsIds) {
+        this.auctionedItemsIds = auctionedItemsIds;
     }
 
     public Building getBuilding() {

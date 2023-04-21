@@ -50,4 +50,6 @@ public class Building {
     public void setMaxPeople(int maxPeople) {
         this.maxPeople = maxPeople;
     }
+
+    public String toString() {return "Name: " + this.name + " Address: " + this.address;}
 }
