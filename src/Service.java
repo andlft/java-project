@@ -1,13 +1,14 @@
-import Auction.Auction;
-import Bid.Bid;
-import Building.Building;
-import Exceptions.LowerBid;
-import Exceptions.NoItems;
-import Item.Item;
-import Item.House;
-import Item.Car;
-import Person.Employee;
-import Person.User;
+import auction.Auction;
+import bid.Bid;
+import building.Building;
+import database.UserService;
+import exceptions.LowerBidException;
+import exceptions.NoItemsException;
+import item.Item;
+import item.House;
+import item.Car;
+import person.Employee;
+import person.User;
 
 import java.util.*;
 
@@ -22,7 +23,7 @@ public class Service {
     public void addAuction(Auction auction){
         auctions.put(auction.getIndex(), auction);
     }
-    public void addBid (Bid bid) throws LowerBid {
+    public void addBid (Bid bid) throws LowerBidException {
         if (bid.getItem().getAvailable() == false){
             System.out.println("Item already sold!");
             return;
@@ -31,7 +32,7 @@ public class Service {
         while (i >= 0){
             if ((bids.get(i).getItem()).equals(bid.getItem())) {
                 if (bids.get(i).getSum() > bid.getSum()) {
-                    throw new LowerBid("You have to bid higher than the last bid!", 333);
+                    throw new LowerBidException("You have to bid higher than the last bid!", 333);
                 }
             }
             i--;
@@ -62,14 +63,31 @@ public class Service {
     }
     public void setItemAsSoldById (Integer id){
         Item item = items.get(id);
+//        int winningBidId = -1;
+//        for (Integer i = 0; i < bids.size(); i++){
+//            if (bids.get(i).getItem() == item){
+//                winningBidId = i;
+//                break;
+//            }
+//        }
+//        User bidder = users.get(winningBidId);
+//        UserService.addUser(bidder.getFirstName(), bidder.getLastName(), bidder.getPhoneNumber(), bidder.getEmail());
+//        try {
+//            Thread.sleep(100);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//        System.out.println(UserService.getUserByEmail(bidder.getEmail()));
+//        UserService.updateUserPhoneByEmail(bidder.getEmail(), "9999999");
+
         item.setAvailable(false);
     }
     public void addBuilding (Building building){buildings.put(building.getIndex(), building);}
 
 
-    public void showAllItems () throws NoItems{
+    public void showAllItems () throws NoItemsException {
         if (items.size() == 0){
-            throw new  NoItems("There are no items to sell!", 555);
+            throw new NoItemsException("There are no items to sell!", 555);
         }
         items.forEach(
                 (key, value) -> System.out.println(key + " : " + value)

@@ -1,4 +1,4 @@
-package Building;
+package building;
 
 public class Building {
     private static int index= 0;

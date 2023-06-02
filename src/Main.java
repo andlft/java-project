@@ -1,12 +1,14 @@
-import Exceptions.LowerBid;
-import Exceptions.NoItems;
-import Item.*;
-import Person.*;
-import Auction.*;
-import Building.*;
-import Bid.*;
+import database.*;
+import exceptions.LowerBidException;
+import exceptions.NoItemsException;
+import item.*;
+import person.*;
+import auction.*;
+import building.*;
+import bid.*;
 
 
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,6 +20,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        Connection connection = MysqlConnection.getConnection();
         Service service = new Service();
         Scanner scanner = new Scanner(System.in);
         Integer option = -1;
@@ -33,6 +36,7 @@ public class Main {
                     "8.Show all houses\n" +
                     "9.Show all cars\n" +
                     "10.Mark an item as sold\n" +
+                    "11.Database query\n" +
                     "0.Leave");
 
             option = Integer.parseInt(scanner.nextLine());
@@ -140,7 +144,7 @@ public class Main {
                             auctionItemIds.add(localOption);
                         }
                     }
-                    catch (NoItems e){
+                    catch (NoItemsException e){
                         System.out.println("There are no items to add!");
                         break;
                     }
@@ -180,7 +184,7 @@ public class Main {
                 int itemId = Integer.parseInt(scanner.nextLine());
                 try {
                     service.addBid(new Bid(sum, service.getUserById(bidderId), service.getAuctionById(auctionId), service.getItemById(itemId)));
-                } catch (LowerBid e) {
+                } catch (LowerBidException e) {
                     System.out.println("You must bid higher than the last bid for this item!");
                 }
             }
@@ -188,7 +192,7 @@ public class Main {
             if (option == 7){
                 try {
                     service.showAllItems();
-                } catch (NoItems e) {
+                } catch (NoItemsException e) {
                     System.out.println("There are no items to show!");
                 }
             }
@@ -207,8 +211,157 @@ public class Main {
                     service.showAllItems();
                     int id = Integer.parseInt(scanner.nextLine());
                     service.setItemAsSoldById(id);
-                } catch (NoItems e) {
+                } catch (NoItemsException e) {
                     System.out.println("There are no items!");
+                }
+            }
+            if(option == 11){
+                int dbOption = -1;
+                System.out.println(
+                        "Choose entity type:\n" +
+                                "1.user\n" +
+                                "2.item\n" +
+                                "3.building\n" +
+                                "4.auction\n"
+                );
+                dbOption = Integer.parseInt(scanner.nextLine());
+                System.out.println(
+                        "Choose action type:\n" +
+                                "1.add\n" +
+                                "2.list all\n" +
+                                "3.update\n"+
+                                "4.delete\n"
+                );
+                UserService userService = UserService.getInstance();
+                ItemService itemService = ItemService.getInstance();
+                AuctionService auctionService = AuctionService.getInstance();
+                BuildingService buildingService = BuildingService.getInstance();
+                LogService logService = LogService.getInstance();
+
+                int dbActionOption = -1;
+                dbActionOption = Integer.parseInt(scanner.nextLine());
+
+                if(dbOption == 1){
+                    if(dbActionOption == 1){
+                        System.out.println("First name:\n");
+                        String firstName = scanner.nextLine();
+                        System.out.println("Last name:\n");
+                        String lastName = scanner.nextLine();
+                        System.out.println("Phone number:\n");
+                        String phoneNumber = scanner.nextLine();
+                        System.out.println("Email:\n");
+                        String email = scanner.nextLine();
+                        UserService.addUser(firstName, lastName, phoneNumber, email);
+                        logService.logAction("create", "user");
+                    }
+                    if(dbActionOption == 2){
+                        UserService.showAllUsers();
+                        logService.logAction("read", "user");
+                    }
+                    if(dbActionOption == 3){
+                        System.out.println("Phone number:\n");
+                        String phoneNumber = scanner.nextLine();
+                        System.out.println("Email: \n");
+                        String email = scanner.nextLine();
+                        UserService.updateUserPhoneByEmail(email, phoneNumber);
+                        logService.logAction("update", "user");
+                    }
+                    if(dbActionOption == 4){
+                        System.out.println("Email:\n");
+                        String email = scanner.nextLine();
+                        UserService.deleteUserByEmail(email);
+                        logService.logAction("delete", "user");
+                    }
+                }
+                if(dbOption == 2){
+                    if(dbActionOption == 1){
+                        System.out.println("Item name:\n");
+                        String name = scanner.nextLine();
+                        System.out.println("Price:\n");
+                        int price = Integer.parseInt(scanner.nextLine());
+                        System.out.println("Owner email: \n");
+                        String email = scanner.nextLine();
+                        ItemService.addItem(name, price, email);
+                        logService.logAction("create", "item");
+                    }
+                    if(dbActionOption == 2){
+                        ItemService.showAllItems();
+                        logService.logAction("read", "item");
+                    }
+                    if(dbActionOption == 3){
+                        System.out.println("Item id:\n");
+                        int id = Integer.parseInt(scanner.nextLine());
+                        System.out.println("New price: \n");
+                        int price = Integer.parseInt(scanner.nextLine());
+                        ItemService.updateItemPriceById(id, price);
+                        logService.logAction("update", "item");
+                    }
+                    if(dbActionOption == 4){
+                        System.out.println("Item id:\n");
+                        int id = Integer.parseInt(scanner.nextLine());
+                        ItemService.deleteItemById(id);
+                        logService.logAction("delete", "item");
+                    }
+                }
+                if(dbOption == 3){
+                    if(dbActionOption == 1){
+                        System.out.println("Building name: \n");
+                        String name = scanner.nextLine();
+                        System.out.println("Address: \n");
+                        String address = scanner.nextLine();
+                        System.out.println("Surface: \n");
+                        int surface = Integer.parseInt(scanner.nextLine());
+                        System.out.println("Maximum number of people:\n");
+                        int maxPeople = Integer.parseInt(scanner.nextLine());
+                        BuildingService.addBuilding(name, address, surface, maxPeople);
+                        logService.logAction("create", "building");
+                    }
+                    if(dbActionOption == 2){
+                        BuildingService.showAllBuildings();
+                        logService.logAction("read", "building");
+                    }
+                    if(dbActionOption == 3){
+                        System.out.println("Building name:\n");
+                        String name = scanner.nextLine();
+                        System.out.println("New maximum number of people: \n");
+                        int maxPeople = Integer.parseInt(scanner.nextLine());
+                        BuildingService.updateMaxPeopleByName(name, maxPeople);
+                        logService.logAction("update", "building");
+                    }
+                    if(dbActionOption == 4){
+                        System.out.println("Buidling name: \n");
+                        String name = scanner.nextLine();
+                        BuildingService.deleteBuildingByName(name);
+                        logService.logAction("delete", "building");
+                    }
+                }
+                if (dbOption == 4){
+                    if(dbActionOption == 1){
+                        System.out.println("Employee email: \n");
+                        String email = scanner.nextLine();
+                        System.out.println("Building name: \n");
+                        String buildingName = scanner.nextLine();
+                        AuctionService.addAuction(email, buildingName);
+                        logService.logAction("create", "auction");
+                    }
+                    if(dbActionOption == 2){
+                        AuctionService.showAllAuctions();
+                        logService.logAction("read", "auction");
+                    }
+                    if(dbActionOption == 3){
+                        System.out.println("Auction id:\n");
+                        int auctionId = Integer.parseInt(scanner.nextLine());
+                        System.out.println("Employee email:\n");
+                        String employeeEmail = scanner.nextLine();
+                        AuctionService.updateEmployeeById(employeeEmail, auctionId);
+                        logService.logAction("update", "auction");
+                    }
+                    if(dbActionOption == 4){
+                        System.out.println("Auction id:\n");
+                        int auctionId = Integer.parseInt(scanner.nextLine());
+                        AuctionService.deleteAuctionById(auctionId);
+                        logService.logAction("delete", "auction");
+                    }
                 }
             }
 

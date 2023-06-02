@@ -1,10 +1,10 @@
-package Exceptions;
+package exceptions;
 
-public class LowerBid extends Exception implements IBaseException {
+public class LowerBidException extends Exception implements IBaseException {
     private int exceptionCode;
     private String exceptionMessage;
 
-    public LowerBid (String exceptionMessage, int exceptionCode){
+    public LowerBidException(String exceptionMessage, int exceptionCode){
         super(exceptionMessage);
         this.exceptionCode = exceptionCode;
         this.exceptionMessage = exceptionMessage;

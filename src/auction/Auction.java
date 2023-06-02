@@ -1,13 +1,11 @@
-package Auction;
+package auction;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import Bid.Bid;
-import Building.Building;
-import Item.Item;
-import Person.Employee;
+import bid.Bid;
+import building.Building;
+import person.Employee;
 
 public class Auction {
     private static int index= 0;

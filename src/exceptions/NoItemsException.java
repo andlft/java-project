@@ -1,10 +1,10 @@
-package Exceptions;
+package exceptions;
 
-public class NoItems extends Exception implements IBaseException {
+public class NoItemsException extends Exception implements IBaseException {
     private int exceptionCode;
     private String exceptionMessage;
 
-    public NoItems (String exceptionMessage, int exceptionCode){
+    public NoItemsException(String exceptionMessage, int exceptionCode){
         super(exceptionMessage);
         this.exceptionCode = exceptionCode;
         this.exceptionMessage = exceptionMessage;

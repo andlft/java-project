@@ -1,4 +1,4 @@
-package Exceptions;
+package exceptions;
 
 public interface IBaseException {
     int getExceptionCode();

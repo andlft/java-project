@@ -1,8 +1,8 @@
-package Bid;
+package bid;
 
-import Auction.Auction;
-import Item.Item;
-import Person.User;
+import auction.Auction;
+import item.Item;
+import person.User;
 
 public class Bid {
     private int sum;

@@ -1,6 +1,6 @@
-package Person;
+package person;
 
-import Item.Item;
+import item.Item;
 
 import java.util.ArrayList;
 import java.util.List;

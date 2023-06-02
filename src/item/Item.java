@@ -1,6 +1,6 @@
-package Item;
+package item;
 
-import Person.User;
+import person.User;
 
 public class Item {
     private static int index= 0;
